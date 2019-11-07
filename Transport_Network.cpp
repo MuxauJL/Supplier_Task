@@ -40,7 +40,33 @@ bool Transport_Network::Transport_Network_Iterator::isDone()
 		return true;
 }
 
+Transport_Network::Transport_Network()
+{
+	source = new Transport_Network_Node("source");
+	stock  = new Transport_Network_Node("stock");
+}
+
+Transport_Network::~Transport_Network()
+{
+	delete stock;
+	delete source;
+}
+
 void Transport_Network::add(Transport_Network_Node* node, int capacity, int currentFlow)
 {
 	source->add(node, capacity, currentFlow);
+}
+
+int Transport_Network::calculateFlow()
+{
+	int flow = 0;
+	auto it = source->createIterator();
+	it->reset();
+	while (!it->isDone()) {
+		auto current = it->getCurrent();
+		flow+=source->getFlow(current);
+		it->moveNext();
+	}
+	flow += source->getFlow(it->getCurrent());
+	return flow;
 }

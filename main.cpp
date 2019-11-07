@@ -1,35 +1,81 @@
+#pragma once
 #include <iostream>
+#include "Ford_Fulkerson.h"
+#include "Transport_Network.h"
 
 int main() {
-	/*HierarchicalStructure* hs = new HierarchicalStructure("1");
-	Element* ch10 = new Element("2");
-	ch10->add(new Element("3"));
+	//Transport_Network* hs = new Transport_Network();
+	//Transport_Network_Node* ch10 = new Transport_Network_Node("2");
+	//ch10->add(new Transport_Network_Node("3"),0,0);
 
-	Element* ch11 = new Element("4");
-	Element* ch110 = new Element("5");
-	ch11->add(ch110);
-	ch110->add(new Element("6")); ch110->add(new Element("7"));
-	ch11->add(new Element("8"));
-	Element* ch112 = new Element("9");
-	ch11->add(ch112);
+	//Transport_Network_Node* ch11 = new Transport_Network_Node("4");
+	//Transport_Network_Node* ch110 = new Transport_Network_Node("5");
+	//ch11->add(ch110,0,0);
+	//ch110->add(new Transport_Network_Node("6"),0,0); ch110->add(new Transport_Network_Node("7"),0,0);
+	//ch11->add(new Transport_Network_Node("8"),0,0);
+	//Transport_Network_Node* ch112 = new Transport_Network_Node("9");
+	//ch11->add(ch112,0,0);
 
-	Element* ch12 = new Element("10");
-	ch12->add(new Element("11"));
-	ch12->add(new Element("12"));
+	//Transport_Network_Node* ch12 = new Transport_Network_Node("10");
+	//ch12->add(new Transport_Network_Node("11"),0,0);
+	//ch12->add(new Transport_Network_Node("12"),0,0);
 
-	hs->add(ch10);
-	hs->add(ch11);
-	hs->add(ch12);
-	IIterator* it = hs->createIterator();
+	//hs->add(ch10,0,0);
+	//hs->add(ch11,0,0);
+	//hs->add(ch12,0,0);
+	//IIterator* it = hs->createIterator();
+	//it->reset();
+	//int k = 0;
+	//while (!it->isDone()) {
+	//	if (k == 3) ch112->add(new Transport_Network_Node("9,5"),0,0);
+	//	if (k == 2) hs->add(new Transport_Network_Node("3,5"),0,0);
+	//	//if (k == 5) ch11->remove();
+	//	++k;
+	//	if (k == 1) {
+	//		ch112->add(hs->getStock(),0,0);
+	//		hs->add(hs->getStock(), 0, 0);
+	//		ch12->add(hs->getStock(), 0, 0);
+	//	}
+	//	std::cout << it->getCurrent()->getName() << "; ";
+	//	it->moveNext();
+	//}
+	//std::cout << it->getCurrent()->getName() << "; ";
+	//delete hs;
+	Transport_Network network;
+	Transport_Network_Node n2("2");
+	Transport_Network_Node n3("3");
+	Transport_Network_Node n4("4");
+	Transport_Network_Node n5("5");
+	Transport_Network_Node n6("6");
+	Transport_Network_Node n7("7");
+	Transport_Network_Node n8("8");
+	Transport_Network_Node n9("9");
+	n2.add(&n5, 4, 0);
+	n5.add(&n8, 2, 0);
+	n8.add(network.getStock(), 3, 0);
+	n2.add(&n7, 2, 0);
+	n7.add(network.getStock(), 4, 0);
+	n3.add(&n6, 2, 0);
+	n6.add(&n7, 3, 0);
+	n4.add(&n6, 3, 0);
+	n4.add(&n7, 3, 0);
+	n4.add(&n9, 2, 0);
+	n9.add(network.getStock(), 2, 0);
+	network.add(&n2, 4, 0);
+	network.add(&n3, 1, 0);
+	network.add(&n4, 3, 0);
+
+	Ford_Fulkerson solver(&network);
+	std::cout << solver.findMaxFlow();
+
+	/*IIterator* it = network.createIterator();
 	it->reset();
-	int k = 0;
 	while (!it->isDone()) {
-		if (++k == 3) ch112->add(new Element("9,5"));
-		if (++k == 2) hs->add(new Element("3,5"));
-		std::cout << it->getCurrent()->getStr() << "; ";
+		std::cout << it->getCurrent()->getName() << "; ";
 		it->moveNext();
 	}
-	std::cout << it->getCurrent()->getStr() << "; ";*/
+	std::cout << it->getCurrent()->getName() << "; ";*/
+
 	system("pause");
 	return 0;
 }

@@ -20,10 +20,13 @@ private:
 		bool isDone();
 	};
 	Transport_Network_Node* source;
+	Transport_Network_Node* stock;
 public:
-	Transport_Network(std::string sourceName) { source = new Transport_Network_Node(sourceName); };
+	Transport_Network();
 	~Transport_Network();
 	Transport_Network_Iterator* createIterator() { return new Transport_Network_Iterator(this); };
-	void add(Transport_Network_Node* node, int capacity, int currentFlow);
+	void add(Transport_Network_Node* node, int capacity, int currentFlow = 0);
+	Transport_Network_Node* getStock() { return stock; }
+	int calculateFlow();
 };
 

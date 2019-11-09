@@ -23,6 +23,7 @@ private:
 	std::string name;
 	std::vector<Transport_Network_Node*> children;
 	std::vector<Saturation> saturations;
+public:
 	class Transport_Network_Node_Iterator
 		:public IIterator
 	{
@@ -35,14 +36,15 @@ private:
 		void moveNext() { ++currentChild; };
 		Transport_Network_Node* getCurrent() { return node->children[currentChild]; };
 		bool isDone();
+		Transport_Network_Node* getNode() { return node; }
 	};
-public:
 	Transport_Network_Node(std::string name) :name(name) {};
 	std::string getName() { return name; };
-	Transport_Network_Node_Iterator* createIterator() { if (children.size() == 0)return nullptr; else return new Transport_Network_Node_Iterator(this); };
+	Transport_Network_Node_Iterator* createIterator();
 	void add(Transport_Network_Node* node, int capacity, int flow = 0);
 	int getCapacity(Transport_Network_Node* child);
 	int getFlow(Transport_Network_Node* child);
 	void addFlow(Transport_Network_Node* child, int additionalFlow);
+	int calculateTotalFlow();
 };
 

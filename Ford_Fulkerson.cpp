@@ -17,33 +17,39 @@ int Ford_Fulkerson::findMaxFlow()
 		it->moveNext();
 	}
 	nodes.push_back(it->getCurrent());
-	if(nodes.back()== network->getStock())
+	if (nodes.back() == network->getStock())
 		stockWasReached(nodes);
-
+	
 	return network->calculateFlow();
 }
 
 void Ford_Fulkerson::stockWasReached(std::vector<Transport_Network_Node*>& nodes)
 {
 	int min = INT_MAX;
-	for (int i = nodes.size() - 2; i > 0; --i) {
-		auto itr = nodes[i]->createIterator();
-		itr->reset();
+	for (int i = nodes.size() - 2; i >= 0; --i) {
+		auto it = nodes[i]->createIterator();
+		if (it == nullptr) {
+			nodes[i] = nullptr;
+			continue;
+		}
+		it->reset();
 		bool isReachable = false;
-		while (!itr->isDone()) {
-			if (itr->getCurrent() == nodes[i + 1]) {
+		int j;
+		for (j = i + 1; nodes[j] == nullptr; ++j);
+		while (!it->isDone()) {
+			if (it->getCurrent() == nodes[j]) {
 				isReachable = true;
 				break;
 			}
-			itr->moveNext();
+			it->moveNext();
 		}
-		if (itr->getCurrent() == nodes[i + 1]) {
+		/*if (it->getCurrent() == nodes[i + 1]) {
 			isReachable = true;
-		}
+		}*/
 		if (!isReachable)
 			nodes[i] = nullptr;
 		else {
-			int capacity = nodes[i]->getCapacity(nodes[i + 1]);
+			int capacity = nodes[i]->getCapacity(nodes[j]);
 			if (min > capacity)
 				min = capacity;
 		}

@@ -11,10 +11,10 @@ private:
 	private:
 		Transport_Network* network;
 		Transport_Network_Node* current;
-		std::stack<IIterator*> stack;
+		std::stack<Transport_Network_Node::Transport_Network_Node_Iterator*> stack;
 	public:
 		Transport_Network_Iterator(Transport_Network* n) :network(n) { reset(); };
-		void reset() { current = network->source; };
+		void reset();
 		void moveNext();
 		Transport_Network_Node* getCurrent() { return current; };
 		bool isDone();
@@ -22,10 +22,11 @@ private:
 	Transport_Network_Node* source;
 	Transport_Network_Node* stock;
 public:
-	Transport_Network();
-	~Transport_Network();
+	Transport_Network(Transport_Network_Node* source = nullptr, Transport_Network_Node* stock = nullptr);
 	Transport_Network_Iterator* createIterator() { return new Transport_Network_Iterator(this); };
-	void add(Transport_Network_Node* node, int capacity, int currentFlow = 0);
+	void setSource(Transport_Network_Node* s) { source = s; }
+	void setStock(Transport_Network_Node* st) { stock = st; }
+	Transport_Network_Node* getSource() { return source; }
 	Transport_Network_Node* getStock() { return stock; }
 	int calculateFlow();
 };

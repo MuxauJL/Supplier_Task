@@ -15,6 +15,16 @@ void Transport_Network_Node::add(Transport_Network_Node* node, int capacity, int
 	saturations.push_back(Saturation(capacity, flow));
 }
 
+void Transport_Network_Node::setSaturation(Transport_Network_Node* child, int capacity, int flow)
+{
+	for (int i = 0; i < children.size(); ++i)
+		if (children[i] == child) {
+			saturations[i].capacity = capacity;
+			saturations[i].flow = flow;
+			return;
+		}
+}
+
 int Transport_Network_Node::getCapacity(Transport_Network_Node* child)
 {
 	for (int i = 0; i < children.size(); ++i)
@@ -48,6 +58,11 @@ int Transport_Network_Node::calculateTotalFlow()
 	for (auto s : saturations)
 		totalFlow += s.flow;
 	return totalFlow;
+}
+
+Transport_Network_Node* Transport_Network_Node::Transport_Network_Node_Iterator::getCurrent()
+{
+	return node->children[currentChild];
 }
 
 bool Transport_Network_Node::Transport_Network_Node_Iterator::isDone()

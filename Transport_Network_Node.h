@@ -34,7 +34,7 @@ public:
 		Transport_Network_Node_Iterator(Transport_Network_Node* node) :node(node), currentChild(0) {};
 		void reset() { currentChild = 0; };
 		void moveNext() { ++currentChild; };
-		Transport_Network_Node* getCurrent() { return node->children[currentChild]; };
+		Transport_Network_Node* getCurrent();
 		bool isDone();
 		Transport_Network_Node* getNode() { return node; }
 	};
@@ -42,6 +42,7 @@ public:
 	std::string getName() { return name; };
 	Transport_Network_Node_Iterator* createIterator();
 	void add(Transport_Network_Node* node, int capacity, int flow = 0);
+	void setSaturation(Transport_Network_Node* node, int capacity, int flow = 0);
 	int getCapacity(Transport_Network_Node* child);
 	int getFlow(Transport_Network_Node* child);
 	void addFlow(Transport_Network_Node* child, int additionalFlow);

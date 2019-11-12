@@ -1,4 +1,5 @@
 #include "Ford_Fulkerson.h"
+//#include <iostream>
 
 int Ford_Fulkerson::findMaxFlow()
 {
@@ -7,9 +8,11 @@ int Ford_Fulkerson::findMaxFlow()
 	it->reset();
 	while (!it->isDone()) {
 		auto current = it->getCurrent();
+		//std::cout << current->getName() << ";\n";
 		nodes.push_back(current);
 		if (current == network->getStock()) {
 			stockWasReached(nodes);
+			//std::cout << '\n';
 			nodes.clear();
 			it->reset();
 			continue;

@@ -2,6 +2,10 @@
 #include <iostream>
 #include "Ford_Fulkerson.h"
 #include "Transport_Network.h"
+#include "Supplier_Task.h"
+#include "Supplier_Task_with_Storage.h"
+#include <fstream>
+#include <numeric>
 
 int main() {
 	//Transport_Network* hs = new Transport_Network();
@@ -40,8 +44,9 @@ int main() {
 	//	it->moveNext();
 	//}
 	//std::cout << it->getCurrent()->getName() << "; ";
-	//delete hs;
-	Transport_Network_Node source("source");
+
+
+	/*Transport_Network_Node source("source");
 	Transport_Network_Node stock("stock");
 	Transport_Network network(&source, &stock);
 	Transport_Network_Node n2("2");
@@ -68,7 +73,7 @@ int main() {
 	source.add(&n4, 3, 0);
 
 	Ford_Fulkerson solver(&network);
-	//std::cout << solver.findMaxFlow();
+	std::cout << solver.findMaxFlow();
 
 	IIterator* it = network.createIterator();
 	it->reset();
@@ -77,8 +82,85 @@ int main() {
 		it->moveNext();
 	}
 	std::cout << it->getCurrent()->getName() << ";\n";
-	std::cout << solver.findMaxFlow();
+	std::cout << "Maximal flow: " << solver.findMaxFlow() << '\n';*/
 
+	std::string dir = "Task4\\";
+	std::vector<std::string> files = {
+		"task_4_01_n2_m2_T2.txt",
+		"task_4_02_n2_m2_T2.txt",
+		"task_4_03_n3_m2_T2.txt",
+		"task_4_04_n3_m2_T2.txt",
+		"task_4_05_n20_m15_T6.txt",
+		"task_4_06_n30_m15_T6.txt",
+		"task_4_07_n30_m15_T12.txt",
+		"task_4_08_n30_m15_T12.txt",
+		"task_4_09_n50_m20_T24.txt",
+		"task_4_10_n50_m20_T24.txt"
+	};
+
+	int n, m, T;
+	std::vector<int> a;
+	std::vector<std::vector<int>> b;
+	std::vector<std::vector<int>> C;
+	std::vector<std::set<int>> D;
+
+	for (size_t i = 0; i < files.size(); ++i) {
+		std::ifstream in(dir + files[i]);
+		if (in.is_open()) {
+			in >> n >> m >> T;
+			std::string mark;
+			in >> mark;
+			if (mark == "a:") {
+				a.resize(n);
+				for (int j = 0; j < n; ++j)
+					in >> a[j];
+			}
+			in >> mark;
+			if (mark == "b:") {
+				b.resize(n);
+				for (int j = 0; j < n; ++j) {
+					b[j].resize(T);
+					for (int t = 0; t < T; ++t)
+						in >> b[j][t];
+				}
+			}
+			in >> mark;
+			int totalC = 0;
+			if (mark == "c:") {
+				C.resize(m);
+				for (int j = 0; j < m; ++j) {
+					C[j].resize(T);
+					for (int t = 0; t < T; ++t) {
+						in >> C[j][t];
+						totalC += C[j][t];
+					}
+				}
+			}
+			in >> mark;
+			if (mark == "D:") {
+				D.resize(m);
+				int value;
+				in >> value;
+				for (int j = 0; j < m;++j) {
+					D[j].insert(value);
+					int prev = value;
+					in >> value;
+					if (value > prev)
+						--j;
+				}
+			}
+			Supplier_Task defaultTask(n, m, T, a, b, C, D);
+			std::cout << i + 1 << ") " << defaultTask.solve() <<
+				", " << totalC << '\n';
+			/*Supplier_Task_with_Storage taskWithUnlimitedStorage(n, m, T, a, b, C, D);
+			std::cout << i + 1 << ") " << taskWithUnlimitedStorage.solve() <<
+				", " << totalC << '\n';*/
+			Supplier_Task_with_Storage taskWithLimitedStorage(n, m, T, a, b, C, D);
+			std::cout << i + 1 << ") " << taskWithLimitedStorage.solve() <<
+				", " << totalC << '\n';
+		}
+		in.close();
+	}
 	system("pause");
 	return 0;
 }

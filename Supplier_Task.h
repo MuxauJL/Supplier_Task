@@ -18,11 +18,11 @@ protected:
 	Transport_Network_Node* source;
 	Transport_Network_Node* stock;
 	virtual void createTransportNetwork();
+	virtual void refreshNetwork();
 public:
 	Supplier_Task(int n, int m, int T,
 		const std::vector<int>& a,	const std::vector<std::vector<int>>& b,
 	const std::vector<std::vector<int>>& C, const std::vector<std::set<int>>& D);
 	~Supplier_Task();
 	virtual int solve();
-	void refreshNetwork();
 };

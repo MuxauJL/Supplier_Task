@@ -4,6 +4,7 @@
 #include "Transport_Network.h"
 #include "Supplier_Task.h"
 #include "Supplier_Task_with_Storage.h"
+#include "Supplier_Task_Minimize_Storage_Amount.h"
 #include <fstream>
 #include <numeric>
 
@@ -155,9 +156,13 @@ int main() {
 			/*Supplier_Task_with_Storage taskWithUnlimitedStorage(n, m, T, a, b, C, D);
 			std::cout << i + 1 << ") " << taskWithUnlimitedStorage.solve() <<
 				", " << totalC << '\n';*/
-			Supplier_Task_with_Storage taskWithLimitedStorage(n, m, T, a, b, C, D);
+			/*Supplier_Task_with_Storage taskWithLimitedStorage(n, m, T, a, b, C, D);
 			std::cout << i + 1 << ") " << taskWithLimitedStorage.solve() <<
-				", " << totalC << '\n';
+				", " << totalC << '\n';*/
+			Supplier_Task_Minimize_Storage_Amount taskWithLimitedStorageAmount(n, m, T, a, b, C, D);
+			std::cout << i + 1 << ") " << taskWithLimitedStorageAmount.solve() <<
+				", " << totalC << ", ";
+			std::cout<< taskWithLimitedStorageAmount.getStorageAmount() << '\n';
 		}
 		in.close();
 	}

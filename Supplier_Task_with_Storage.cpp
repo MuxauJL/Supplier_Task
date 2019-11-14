@@ -4,14 +4,15 @@
 Supplier_Task_with_Storage::Supplier_Task_with_Storage(int n, int m, int T,
 		const std::vector<int> & a, const std::vector<std::vector<int>> & b,
 		const std::vector<std::vector<int>> & C, const std::vector<std::set<int>> & D) : 
-	Supplier_Task(n, m, T, a, b, C, D)
+	Supplier_Task(n, m, T, a, b, C, D), minStorage(U)
 {}
 
 void Supplier_Task_with_Storage::createTransportNetwork()
 {
 	Supplier_Task::createTransportNetwork();
-	for (int i = 0; i < consumersPartial.size() - 1; ++i)
-		consumersPartial[i]->add(consumersPartial[i + 1], U/2);
+	for (int i = 0; i < m; ++i)
+		for (int t = 0; t < T - 1; ++t)
+			consumersPartial[i * T + t]->add(consumersPartial[i * T + t + 1], U / 2);
 }
 
 int Supplier_Task_with_Storage::solve()
@@ -34,11 +35,13 @@ int Supplier_Task_with_Storage::solve()
 			minW += (maxW - minW) / 2;
 		}
 		refreshNetwork();
-		for (int i = 0; i < consumersPartial.size() - 1; ++i)
-			consumersPartial[i]->setSaturation(consumersPartial[i + 1], (maxW + minW) / 2);
+		for (int i = 0; i < m; ++i)
+			for (int t = 0; t < T - 1; ++t)
+				consumersPartial[i * T + t]->setSaturation(consumersPartial[i * T + t + 1], (maxW + minW) / 2);
 	} while (maxW - minW != 1);
-	for (int i = 0; i < consumersPartial.size() - 1; ++i)
-		consumersPartial[i]->setSaturation(consumersPartial[i + 1], maxW);
+	for (int i = 0; i < m; ++i)
+		for (int t = 0; t < T - 1; ++t)
+			consumersPartial[i * T + t]->setSaturation(consumersPartial[i * T + t + 1], maxW);
 	minStorage = maxW;
 	return solver.findMaxFlow();
 }

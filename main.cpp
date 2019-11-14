@@ -4,7 +4,7 @@
 #include "Transport_Network.h"
 #include "Supplier_Task.h"
 #include "Supplier_Task_with_Storage.h"
-#include "Supplier_Task_Minimize_Storage_Amount.h"
+#include "Supplier_Task_Controlling_Storages_Amount.h"
 #include <fstream>
 #include <numeric>
 
@@ -92,7 +92,7 @@ int main() {
 		"task_4_03_n3_m2_T2.txt",
 		"task_4_04_n3_m2_T2.txt",
 		"task_4_05_n20_m15_T6.txt",
-		"task_4_06_n30_m15_T6.txt",
+		"task_4_06_n20_m15_T6.txt",
 		"task_4_07_n30_m15_T12.txt",
 		"task_4_08_n30_m15_T12.txt",
 		"task_4_09_n50_m20_T24.txt",
@@ -151,18 +151,20 @@ int main() {
 				}
 			}
 			Supplier_Task defaultTask(n, m, T, a, b, C, D);
-			std::cout << i + 1 << ") " << defaultTask.solve() <<
+			std::cout << i + 1 << ")\nDefault:\n" << defaultTask.solve() <<
 				", " << totalC << '\n';
-			/*Supplier_Task_with_Storage taskWithUnlimitedStorage(n, m, T, a, b, C, D);
-			std::cout << i + 1 << ") " << taskWithUnlimitedStorage.solve() <<
-				", " << totalC << '\n';*/
-			/*Supplier_Task_with_Storage taskWithLimitedStorage(n, m, T, a, b, C, D);
-			std::cout << i + 1 << ") " << taskWithLimitedStorage.solve() <<
-				", " << totalC << '\n';*/
-			Supplier_Task_Minimize_Storage_Amount taskWithLimitedStorageAmount(n, m, T, a, b, C, D);
-			std::cout << i + 1 << ") " << taskWithLimitedStorageAmount.solve() <<
-				", " << totalC << ", ";
-			std::cout<< taskWithLimitedStorageAmount.getStorageAmount() << '\n';
+			Supplier_Task_Controlling_Storages_Amount taskWithAllStorages(n, m, T, a, b, C, D);
+			std::cout << "Everybody has a storage:\n" << taskWithAllStorages.solve() <<
+				", " << totalC << ", " << taskWithAllStorages.getStorageAmount() << '\n';
+			Supplier_Task_with_Storage taskWithMinimalStorageSize(n, m, T, a, b, C, D);
+			std::cout << "Minimizing storage size:\n" << taskWithMinimalStorageSize.solve() <<
+				", " << totalC << ", " << taskWithMinimalStorageSize.getMinStorage() << '\n';
+			Supplier_Task_Controlling_Storages_Amount taskWithLimitedStorageAmountBasic(n, m, T, a, b, C, D, Supplier_Task_Controlling_Storages_Amount::Basic);
+			std::cout << "Basic distribution of storages:\n" << taskWithLimitedStorageAmountBasic.solve() <<
+				", " << totalC << ", "<< taskWithLimitedStorageAmountBasic.getStorageAmount() << '\n';
+			Supplier_Task_Controlling_Storages_Amount taskWithLimitedStorageAmountMy(n, m, T, a, b, C, D, Supplier_Task_Controlling_Storages_Amount::My);
+			std::cout << "My distribution of storages:\n" << taskWithLimitedStorageAmountMy.solve() <<
+				", " << totalC << ", " << taskWithLimitedStorageAmountMy.getStorageAmount() << '\n';
 		}
 		in.close();
 	}

@@ -56,6 +56,7 @@ void Ford_Fulkerson::stockWasReached(std::vector<Transport_Network_Node*>& nodes
 			if (min > capacity)
 				min = capacity;
 		}
+		delete it;
 	}
 	for (int i = 0; i < nodes.size() - 1; ++i)
 		if (nodes[i] != nullptr) {

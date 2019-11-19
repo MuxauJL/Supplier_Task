@@ -4,11 +4,12 @@ void Transport_Network::Transport_Network_Iterator::reset()
 {
 	stack = std::stack<Transport_Network_Node::Transport_Network_Node_Iterator*>();
 	current = network->source;
+	visitedNodes.clear();
 }
 
 void Transport_Network::Transport_Network_Iterator::moveNext()
 {
-	Transport_Network_Node::Transport_Network_Node_Iterator* it = current->createIterator();
+	Transport_Network_Node::Transport_Network_Node_Iterator* it = current->createIterator(&visitedNodes);
 	if (it == nullptr) {
 		it = stack.top();
 		while (!it->isDone() && it->getNode()->getCapacity(it->getCurrent()) == 0) {
@@ -23,8 +24,13 @@ void Transport_Network::Transport_Network_Iterator::moveNext()
 			it->moveNext();
 		}
 		current = it->getCurrent();
-		stack.push(it);
-		it->moveNext();
+		if (visitedNodes.find(it->getCurrent()) == visitedNodes.end()) {
+			stack.push(it);
+			visitedNodes.insert(current);
+			it->moveNext();
+		}
+		else
+			delete it;
 	}
 }
 
@@ -35,13 +41,13 @@ bool Transport_Network::Transport_Network_Iterator::isDone()
 		stack.pop();
 	}
 	if (stack.size() != 0)return false;
-	IIterator* it = current->createIterator();
-	if (it != nullptr) {
+	IIterator* it = current->createIterator(&visitedNodes);
+	if (it == nullptr)
+		return true;	
+	else {
 		delete it;
 		return false;
 	}
-	else
-		return true;
 }
 
 Transport_Network::Transport_Network(Transport_Network_Node* source, Transport_Network_Node* stock) :

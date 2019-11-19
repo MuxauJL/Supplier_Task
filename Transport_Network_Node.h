@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <set>
 class Transport_Network_Node;
 
 class IIterator {
@@ -35,12 +36,12 @@ public:
 		void reset() { currentChild = 0; };
 		void moveNext() { ++currentChild; };
 		Transport_Network_Node* getCurrent();
-		bool isDone();
+		bool isDone(); // false - if you can take the current
 		Transport_Network_Node* getNode() { return node; }
 	};
 	Transport_Network_Node(std::string name) :name(name) {};
 	std::string getName() { return name; };
-	Transport_Network_Node_Iterator* createIterator();
+	Transport_Network_Node_Iterator* createIterator(const std::set<Transport_Network_Node*>* visited = nullptr);
 	void add(Transport_Network_Node* node, int capacity, int flow = 0);
 	void setSaturation(Transport_Network_Node* node, int capacity, int flow = 0);
 	int getCapacity(Transport_Network_Node* child);

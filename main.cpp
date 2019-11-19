@@ -47,9 +47,9 @@ int main() {
 	//std::cout << it->getCurrent()->getName() << "; ";
 
 
-	/*Transport_Network_Node source("source");
+	Transport_Network_Node source("source");
 	Transport_Network_Node stock("stock");
-	Transport_Network network(&source, &stock);
+	Transport_Network* network = new Transport_Network(&source, &stock);
 	Transport_Network_Node n2("2");
 	Transport_Network_Node n3("3");
 	Transport_Network_Node n4("4");
@@ -60,30 +60,31 @@ int main() {
 	Transport_Network_Node n9("9");
 	n2.add(&n5, 2, 0);
 	n5.add(&n8, 3, 0);
-	n8.add(network.getStock(), 3, 0);
+	n8.add(network->getStock(), 3, 0);
 	n2.add(&n7, 2, 0);
-	n7.add(network.getStock(), 4, 0);
+	n7.add(network->getStock(), 4, 0);
 	n3.add(&n6, 2, 0);
 	n6.add(&n7, 3, 0);
 	n4.add(&n6, 3, 0);
 	n4.add(&n7, 3, 0);
 	n6.add(&n9, 2, 0);
-	n9.add(network.getStock(), 2, 0);
+	n9.add(network->getStock(), 2, 0);
 	source.add(&n2, 4, 0);
 	source.add(&n3, 1, 0);
 	source.add(&n4, 3, 0);
 
-	Ford_Fulkerson solver(&network);
-	std::cout << solver.findMaxFlow();
+	Ford_Fulkerson solver;
+	solver.setNetwork(std::unique_ptr<Transport_Network>(network));
+	//std::cout << solver.findMaxFlow();
 
-	IIterator* it = network.createIterator();
+	IIterator* it = network->createIterator();
 	it->reset();
 	while (!it->isDone()) {
 		std::cout << it->getCurrent()->getName() << "; ";
 		it->moveNext();
 	}
-	std::cout << it->getCurrent()->getName() << ";\n";
-	std::cout << "Maximal flow: " << solver.findMaxFlow() << '\n';*/
+	std::cout << it->getCurrent()->getName() << ";\n\n";
+	std::cout << "Maximal flow:\n" << solver.findMaxFlow() << '\n';
 
 	std::string dir = "Task4\\";
 	std::vector<std::string> files = {

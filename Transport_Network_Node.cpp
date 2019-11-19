@@ -1,11 +1,15 @@
 #include "Transport_Network_Node.h"
 #include <stdexcept>
 
-Transport_Network_Node::Transport_Network_Node_Iterator* Transport_Network_Node::createIterator()
+Transport_Network_Node::Transport_Network_Node_Iterator* Transport_Network_Node::createIterator(const std::set<Transport_Network_Node*>* visited)
 {
 	for (int i = 0; i < children.size(); ++i)
-		if (saturations[i].capacity > 0)
+		if (saturations[i].capacity > 0) {
+			if (visited != nullptr
+				&& visited->find(children[i]) != visited->end())
+				continue;
 			return new Transport_Network_Node_Iterator(this);
+		}
 	return nullptr;
 }
 

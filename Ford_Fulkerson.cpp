@@ -28,6 +28,19 @@ int Ford_Fulkerson::findMaxFlow()
 
 void Ford_Fulkerson::stockWasReached(std::vector<Transport_Network_Node*>& nodes)
 {
+	/*auto cur = nodes.back();
+	std::vector<Transport_Network_Node*> path;
+	int min = INT_MAX;
+	while (cur != network->getSource()) {
+		if (min > cur->getCapacity(cur->previous))
+			min = cur->getCapacity(cur->previous);
+		path.push_back(cur);
+		cur = cur->previous;
+	}
+	for (int i = path.size()-1; i >0; --i) {
+		path[i]->addFlow(path[i-1], min);
+		path[i-1]->addFlow(path[i], -min);
+	}*/
 	int min = INT_MAX;
 	for (int i = nodes.size() - 2; i >= 0; --i) {
 		auto it = nodes[i]->createIterator();

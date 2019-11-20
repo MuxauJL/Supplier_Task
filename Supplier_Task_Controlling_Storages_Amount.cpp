@@ -32,8 +32,10 @@ void Supplier_Task_Controlling_Storages_Amount::createTransportNetwork()
 	Supplier_Task::createTransportNetwork();
 	whoHasStorage.resize(m, true);
 	for (int i = 0; i < m; ++i) 
-		for (int t = 0; t < T - 1; ++t)
+		for (int t = 0; t < T - 1; ++t) {
 			consumersPartial[i * T + t]->add(consumersPartial[i * T + t + 1], U);
+			consumersPartial[i * T + t + 1]->add(consumersPartial[i * T + t], 0);
+		}
 }
 
 void Supplier_Task_Controlling_Storages_Amount::refreshNetwork()
@@ -45,8 +47,10 @@ void Supplier_Task_Controlling_Storages_Amount::refreshNetwork()
 			capacity = U;
 		else
 			capacity = 0;
-		for (int t = 0; t < T - 1; ++t)
+		for (int t = 0; t < T - 1; ++t) {
 			consumersPartial[i * T + t]->setSaturation(consumersPartial[i * T + t + 1], capacity);
+			consumersPartial[i * T + t + 1]->setSaturation(consumersPartial[i * T + t], 0);
+		}
 	}
 }
 

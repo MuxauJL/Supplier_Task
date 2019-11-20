@@ -11,8 +11,10 @@ void Supplier_Task_with_Storage::createTransportNetwork()
 {
 	Supplier_Task::createTransportNetwork();
 	for (int i = 0; i < m; ++i)
-		for (int t = 0; t < T - 1; ++t)
+		for (int t = 0; t < T - 1; ++t) {
 			consumersPartial[i * T + t]->add(consumersPartial[i * T + t + 1], U / 2);
+			consumersPartial[i * T + t + 1]->add(consumersPartial[i * T + t], 0);
+		}
 }
 
 int Supplier_Task_with_Storage::solve()

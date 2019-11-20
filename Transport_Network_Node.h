@@ -21,27 +21,29 @@ private:
 		Saturation(int c, int f) :
 			capacity(c), flow(f) {};
 	};
-	std::string name;
+	//std::string name;
 	std::vector<Transport_Network_Node*> children;
 	std::vector<Saturation> saturations;
 public:
+	//Transport_Network_Node* previous;
 	class Transport_Network_Node_Iterator
 		:public IIterator
 	{
 	private:
 		Transport_Network_Node* node;
 		int currentChild;
+		std::set<Transport_Network_Node*>* visitedNodes;
 	public:
-		Transport_Network_Node_Iterator(Transport_Network_Node* node) :node(node), currentChild(0) {};
+		Transport_Network_Node_Iterator(Transport_Network_Node* node, std::set<Transport_Network_Node*>* visitedNodes = nullptr);
 		void reset() { currentChild = 0; };
 		void moveNext() { ++currentChild; };
 		Transport_Network_Node* getCurrent();
 		bool isDone(); // false - if you can take the current
 		Transport_Network_Node* getNode() { return node; }
 	};
-	Transport_Network_Node(std::string name) :name(name) {};
-	std::string getName() { return name; };
-	Transport_Network_Node_Iterator* createIterator(const std::set<Transport_Network_Node*>* visited = nullptr);
+	//Transport_Network_Node(std::string name) :name(name) {};
+	//std::string getName() { return name; };
+	Transport_Network_Node_Iterator* createIterator(std::set<Transport_Network_Node*>* visited = nullptr);
 	void add(Transport_Network_Node* node, int capacity, int flow = 0);
 	void setSaturation(Transport_Network_Node* node, int capacity, int flow = 0);
 	int getCapacity(Transport_Network_Node* child);

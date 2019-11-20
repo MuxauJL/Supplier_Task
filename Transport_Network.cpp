@@ -9,28 +9,17 @@ void Transport_Network::Transport_Network_Iterator::reset()
 
 void Transport_Network::Transport_Network_Iterator::moveNext()
 {
+	visitedNodes.insert(current);
 	Transport_Network_Node::Transport_Network_Node_Iterator* it = current->createIterator(&visitedNodes);
 	if (it == nullptr) {
 		it = stack.top();
-		while (!it->isDone() && it->getNode()->getCapacity(it->getCurrent()) == 0) {
-			it->moveNext();
-		}
 		current = it->getCurrent();
 		it->moveNext();
 	}
 	else {
-		it->reset();
-		while (!it->isDone() && current->getCapacity(it->getCurrent()) == 0) {
-			it->moveNext();
-		}
 		current = it->getCurrent();
-		if (visitedNodes.find(it->getCurrent()) == visitedNodes.end()) {
-			stack.push(it);
-			visitedNodes.insert(current);
-			it->moveNext();
-		}
-		else
-			delete it;
+		stack.push(it);
+		it->moveNext();
 	}
 }
 

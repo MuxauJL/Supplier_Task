@@ -1,15 +1,26 @@
 #include "Transport_Network_Node.h"
 #include <stdexcept>
 
-Transport_Network_Node::Transport_Network_Node_Iterator* Transport_Network_Node::createIterator(const std::set<Transport_Network_Node*>* visited)
+
+Transport_Network_Node::Transport_Network_Node_Iterator::Transport_Network_Node_Iterator(Transport_Network_Node* node, std::set<Transport_Network_Node*>* visitedNodes)
+	:node(node), currentChild(0), visitedNodes(visitedNodes) {};
+
+Transport_Network_Node::Transport_Network_Node_Iterator* Transport_Network_Node::createIterator(std::set<Transport_Network_Node*>* visited)
 {
-	for (int i = 0; i < children.size(); ++i)
-		if (saturations[i].capacity > 0) {
+	auto it = new Transport_Network_Node_Iterator(this, visited);
+	it->reset();
+	while (!it->isDone()) {
+		auto current = it->getCurrent();
+		if (getCapacity(current) > 0) {
 			if (visited != nullptr
-				&& visited->find(children[i]) != visited->end())
+				&& visited->find(current) != visited->end()) {
+				it->moveNext();
 				continue;
-			return new Transport_Network_Node_Iterator(this);
+			}
+			return it;
 		}
+		it->moveNext();
+	}
 	return nullptr;
 }
 
@@ -53,6 +64,10 @@ void Transport_Network_Node::addFlow(Transport_Network_Node* child, int addition
 			if (saturations[i].capacity < 0)
 				throw std::invalid_argument("Too much additionalFlow: capacity < 0");
 			saturations[i].flow += additionalFlow;
+
+			auto capacity = child->getCapacity(this);
+			//auto flow = child->getFlow(this);
+			child->setSaturation(this, capacity + additionalFlow, -saturations[i].flow/*flow - additionalFlow*/);
 		}
 }
 
@@ -75,7 +90,12 @@ bool Transport_Network_Node::Transport_Network_Node_Iterator::isDone()
 	if (answer)
 		return true;
 	for (int i = currentChild; i < node->children.size(); ++i)
-		if (node->saturations[i].capacity > 0)
+		if (node->saturations[i].capacity > 0) {
+			if (visitedNodes != nullptr &&
+				visitedNodes->find(node->children[i]) != visitedNodes->end())
+				continue;
+			currentChild = i;
 			return false;
+		}
 	return true;
 }

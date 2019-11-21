@@ -2,6 +2,10 @@
 
 void Transport_Network::Transport_Network_Iterator::reset()
 {
+	while (stack.size() != 0) {
+		delete stack.top();
+		stack.pop();
+	}
 	stack = std::stack<Transport_Network_Node::Transport_Network_Node_Iterator*>();
 	current = network->source;
 	visitedNodes.clear();

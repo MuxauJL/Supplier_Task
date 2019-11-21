@@ -47,9 +47,7 @@ void Supplier_Task::createTransportNetwork()
 			}
 			consumersPartial.back()->add(stock, C[i][j]);
 		}
-	std::unique_ptr<Transport_Network> network = 
-		std::unique_ptr<Transport_Network>(new Transport_Network(source, stock));
-	solver.setNetwork(std::move(network));
+	solver.setNetwork(std::move(std::unique_ptr<Transport_Network>(new Transport_Network(source, stock))));
 }
 
 int Supplier_Task::solve()

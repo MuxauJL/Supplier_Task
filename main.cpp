@@ -141,8 +141,6 @@ int main() {
 	std::vector<std::vector<short int>> C;
 	std::vector<std::set<short int>> D;
 	for (size_t i = 0; i < files.size(); ++i) {
-		if (i != 5)
-			continue;
 		std::ifstream in(dir + files[i]);
 		if (in.is_open()) {
 			in >> n >> m >> T;
@@ -207,11 +205,11 @@ int main() {
 				std::cout << "Basic distribution of storages:\n" << taskWithLimitedStorageAmountBasic.solve() <<
 					", " << totalC << ", " << taskWithLimitedStorageAmountBasic.getStorageAmount() << '\n';
 			} 
-			/*{
+			{
 				Supplier_Task_Controlling_Storages_Amount taskWithLimitedStorageAmountMy(n, m, T, a, b, C, D, Supplier_Task_Controlling_Storages_Amount::My);
 				std::cout << "My distribution of storages:\n" << taskWithLimitedStorageAmountMy.solve() <<
 					", " << totalC << ", " << taskWithLimitedStorageAmountMy.getStorageAmount() << '\n';
-			}*/
+			}
 		}
 		in.close();
 	}

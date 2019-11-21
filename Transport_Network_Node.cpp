@@ -21,6 +21,7 @@ Transport_Network_Node::Transport_Network_Node_Iterator* Transport_Network_Node:
 		}
 		it->moveNext();
 	}
+	delete it;
 	return nullptr;
 }
 

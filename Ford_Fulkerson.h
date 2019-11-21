@@ -11,6 +11,6 @@ public:
 	void setNetwork(std::unique_ptr<Transport_Network> network) { this->network = std::move(network); }
 	int findMaxFlow();
 private:
-	void stockWasReached(std::vector<Transport_Network_Node*>& nodes);
+	void stockWasReached();
 };
 

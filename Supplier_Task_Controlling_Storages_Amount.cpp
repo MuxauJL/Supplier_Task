@@ -1,9 +1,9 @@
 #include "Supplier_Task_Controlling_Storages_Amount.h"
 #include <algorithm>
 
-Supplier_Task_Controlling_Storages_Amount::Supplier_Task_Controlling_Storages_Amount(int n, int m, int T,
-	const std::vector<int>& a, const std::vector<std::vector<int>>& b,
-	const std::vector<std::vector<int>>& C, const std::vector<std::set<int>>& D, Storages_Distributing_Strategy strategyID) :
+Supplier_Task_Controlling_Storages_Amount::Supplier_Task_Controlling_Storages_Amount(short int n, short int m, short int T,
+	const std::vector<short int>& a, const std::vector<std::vector<short int>>& b,
+	const std::vector<std::vector<short int>>& C, const std::vector<std::set<short int>>& D, Storages_Distributing_Strategy strategyID) :
 Supplier_Task(n, m, T, a, b, C, D)
 {
 	switch(strategyID){

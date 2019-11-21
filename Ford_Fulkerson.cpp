@@ -3,79 +3,39 @@
 
 int Ford_Fulkerson::findMaxFlow()
 {
-	std::vector<Transport_Network_Node*> nodes;
 	IIterator* it = network->createIterator();
 	it->reset();
 	while (!it->isDone()) {
 		auto current = it->getCurrent();
 		//std::cout << current->getName() << ";\n";
-		nodes.push_back(current);
 		if (current == network->getStock()) {
-			stockWasReached(nodes);
+			stockWasReached();
 			//std::cout << '\n';
-			nodes.clear();
 			it->reset();
 			continue;
 		}
 		it->moveNext();
 	}
-	nodes.push_back(it->getCurrent());
-	if (nodes.back() == network->getStock())
-		stockWasReached(nodes);
+	if (it->getCurrent() == network->getStock())
+		stockWasReached();
 	
+	delete it;
 	return network->calculateFlow();
 }
 
-void Ford_Fulkerson::stockWasReached(std::vector<Transport_Network_Node*>& nodes)
+void Ford_Fulkerson::stockWasReached()
 {
-	/*auto cur = nodes.back();
-	std::vector<Transport_Network_Node*> path;
+	auto cur = network->getStock();
 	int min = INT_MAX;
 	while (cur != network->getSource()) {
-		if (min > cur->getCapacity(cur->previous))
-			min = cur->getCapacity(cur->previous);
-		path.push_back(cur);
-		cur = cur->previous;
+		if (min > cur->getPrevious()->getCapacity(cur))
+			min = cur->getPrevious()->getCapacity(cur);
+		cur = cur->getPrevious();
 	}
-	for (int i = path.size()-1; i >0; --i) {
-		path[i]->addFlow(path[i-1], min);
-		path[i-1]->addFlow(path[i], -min);
-	}*/
-	int min = INT_MAX;
-	for (int i = nodes.size() - 2; i >= 0; --i) {
-		auto it = nodes[i]->createIterator();
-		if (it == nullptr) {
-			nodes[i] = nullptr;
-			continue;
-		}
-		it->reset();
-		bool isReachable = false;
-		int j;
-		for (j = i + 1; nodes[j] == nullptr; ++j);
-		while (!it->isDone()) {
-			if (it->getCurrent() == nodes[j]) {
-				isReachable = true;
-				break;
-			}
-			it->moveNext();
-		}
-		/*if (it->getCurrent() == nodes[i + 1]) {
-			isReachable = true;
-		}*/
-		if (!isReachable)
-			nodes[i] = nullptr;
-		else {
-			int capacity = nodes[i]->getCapacity(nodes[j]);
-			if (min > capacity)
-				min = capacity;
-		}
-		delete it;
+
+	cur = network->getStock();	
+	while (cur != network->getSource()) {
+		cur->getPrevious()->addFlow(cur, min);
+		cur = cur->getPrevious();
 	}
-	for (int i = 0; i < nodes.size() - 1; ++i)
-		if (nodes[i] != nullptr) {
-			int j;
-			for (j = i + 1; nodes[j] == nullptr; ++j);
-			nodes[i]->addFlow(nodes[j], min);
-			i = j - 1;
-		}
 }

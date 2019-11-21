@@ -14,10 +14,12 @@ void Transport_Network::Transport_Network_Iterator::moveNext()
 	if (it == nullptr) {
 		it = stack.top();
 		current = it->getCurrent();
+		current->setPrevious(it->getNode());
 		it->moveNext();
 	}
 	else {
 		current = it->getCurrent();
+		current->setPrevious(it->getNode());
 		stack.push(it);
 		it->moveNext();
 	}
@@ -31,8 +33,8 @@ bool Transport_Network::Transport_Network_Iterator::isDone()
 	}
 	if (stack.size() != 0)return false;
 	IIterator* it = current->createIterator(&visitedNodes);
-	if (it == nullptr)
-		return true;	
+	if (it == nullptr) 
+		return true;
 	else {
 		delete it;
 		return false;

@@ -1,5 +1,6 @@
 #include "Supplier_Task_Controlling_Storages_Amount.h"
 #include <algorithm>
+#include <numeric>
 
 Supplier_Task_Controlling_Storages_Amount::Supplier_Task_Controlling_Storages_Amount(short int n, short int m, short int T,
 	const std::vector<short int>& a, const std::vector<std::vector<short int>>& b,
@@ -97,9 +98,11 @@ void Supplier_Task_Controlling_Storages_Amount::My_Choosing_Strategy::distribute
 	indexes.reserve(m);
 	for (int i = 0; i < m; ++i)
 		indexes.push_back(i);
-	// sort by decreasing count of suppliers
+	// sort by increasing amount of consumption
 	auto comp = [&context](const int& idx1, const int& idx2) {
-		return (context->D[idx1].size() > context->D[idx2].size());
+		auto consumption_1 = std::accumulate(context->C[idx1].begin(), context->C[idx1].end(), 0);
+		auto consumption_2 = std::accumulate(context->C[idx2].begin(), context->C[idx2].end(), 0);
+		return consumption_1 <= consumption_2;
 	};
 	std::sort(indexes.begin(), indexes.end(), comp);
 
